@@ -4,7 +4,7 @@
     <section class="wrapper">
       <!-- Блоки с биржами -->
       <div class="blockBIRJ">
-        <div class="block" @click="navigateToExchange('binance')">
+        <div class="block" @click="navigateToExchange('https://www.binance.com/')">
           <div class="block__header">
             <img src="@/assets/images/binance.png" alt="Binance" />
             <h3>Binance</h3>
@@ -12,7 +12,7 @@
           <p>Search for profitable P2P <span>exchange</span> ads.</p>
         </div>
 
-        <div class="block" @click="navigateToExchange('huobi')">
+        <div class="block" @click="navigateToExchange('https://www.huobi.com/')">
           <div class="block__header">
             <img src="@/assets/images/huobi.png" alt="Huobi" />
             <h3>Huobi</h3>
@@ -20,7 +20,7 @@
           <p>Search for profitable P2P <span>exchange</span> ads.</p>
         </div>
 
-        <div class="block" @click="navigateToExchange('bybit')">
+        <div class="block" @click="navigateToExchange('https://www.bybit.com/')">
           <div class="block__header">
             <img src="@/assets/images/bybit.png" alt="ByBit" />
             <h3>ByBit</h3>
@@ -31,7 +31,7 @@
 
       <!-- Блоки с криптокошельками -->
       <div class="blockBIRJ">
-        <div class="block" @click="navigateToWallet('metamask')">
+        <div class="block" @click="navigateToWalletSite('https://metamask.io/')" >
           <div class="block__header">
             <img src="@/assets/images/meta.jpg" alt="MetaMask" />
             <h3>MetaMask</h3>
@@ -39,7 +39,7 @@
           <p>A popular <span>Ethereum-based</span> wallet for secure transactions.</p>
         </div>
 
-        <div class="block" @click="navigateToWallet('coinbase')">
+        <div class="block" @click="navigateToWalletSite('https://www.coinbase.com/wallet')" >
           <div class="block__header">
             <img src="@/assets/images/coinbase.png" alt="Coinbase Wallet" />
             <h3>Coinbase Wallet</h3>
@@ -47,7 +47,7 @@
           <p>Widely used for holding a variety of <span>cryptocurrencies</span>.</p>
         </div>
 
-        <div class="block" @click="navigateToWallet('trust')">
+        <div class="block" @click="navigateToWalletSite('https://trustwallet.com/')" >
           <div class="block__header">
             <img src="@/assets/images/trust.jpg" alt="Trust Wallet" />
             <h3>Trust Wallet</h3>
@@ -55,13 +55,13 @@
           <p>Supports a wide range of cryptocurrencies and <span>NFTs</span>.</p>
         </div>
       </div>
+
       <!-- График состояния рынка -->
       <div class="block chart">
         <h3>Market Overview</h3>
         <canvas id="marketChart"></canvas>
       </div>
 
-      <!-- Часто задаваемые вопросы -->
       <!-- Часто задаваемые вопросы -->
       <div class="faq">
         <h3>Top FAQs about Cryptocurrency</h3>
@@ -102,7 +102,7 @@
       <div class="modal-content">
         <span class="close" @click="showModal = false">&times;</span>
         <h3>Connect Your Crypto Wallet</h3>
-        <input type="text" placeholder="Enter wallet address"  class="textarea"/>
+        <input type="text" placeholder="Enter wallet address" class="textarea"/>
         <button class="action-button" @click="connectWallet">Connect Wallet</button>
       </div>
     </div>
@@ -117,6 +117,7 @@
     </footer>
   </div>
 </template>
+
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/userStore';
@@ -148,12 +149,12 @@ export default defineComponent({
       faqAnswers.value[faq] = !faqAnswers.value[faq];
     };
 
-    const navigateToExchange = (exchange: string) => {
-      router.push(`/exchange/${exchange}`);
+    const navigateToExchange = (url: string) => {
+      window.open(url, '_blank');
     };
 
-    const navigateToWallet = (wallet: string) => {
-      router.push(`/wallet/${wallet}`);
+    const navigateToWalletSite = (url: string) => {
+      window.open(url, '_blank');
     };
 
     const connectWallet = () => {
@@ -162,60 +163,58 @@ export default defineComponent({
     };
     
     const setupChart = () => {
-  const ctx = (document.getElementById('marketChart') as HTMLCanvasElement)?.getContext('2d');
-  if (ctx) {
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['BTC', 'ETH', 'ADA', 'XRP', 'DOT'],
-        datasets: [{
-          label: 'Price in USD',
-          data: [450, 300, 1.5, 0.75, 20],
-          borderColor: '#9918aa',
-          backgroundColor: 'rgba(153, 24, 170, 0.3)',
-          fill: true
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-            labels: { color: '#fff' }
-          }
-        },
-        scales: {
-          x: {
-            ticks: {
-              color: '#fff',
-            },
-            min: 0,
-            max: 500,
-            beginAtZero: true,
+      const ctx = (document.getElementById('marketChart') as HTMLCanvasElement)?.getContext('2d');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['BTC', 'ETH', 'ADA', 'XRP', 'DOT'],
+            datasets: [{
+              label: 'Price in USD',
+              data: [450, 300, 1.5, 0.75, 20],
+              borderColor: '#9918aa',
+              backgroundColor: 'rgba(153, 24, 170, 0.3)',
+              fill: true
+            }]
           },
-          y: {
-            ticks: {
-              color: '#fff',
-              // Обрабатываем как string, так и number
-              callback: function(tickValue: string | number) {
-                const value = typeof tickValue === 'number' ? tickValue : parseFloat(tickValue);
-                return value % 50 === 0 ? value : ''; // Показывать только значения, кратные 50
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: 'top',
+                labels: { color: '#fff' }
               }
             },
-            min: 0,
-            max: 500,
-            beginAtZero: true,
+            scales: {
+              x: {
+                ticks: {
+                  color: '#fff',
+                },
+                min: 0,
+                max: 500,
+                beginAtZero: true,
+              },
+              y: {
+                ticks: {
+                  color: '#fff',
+                  callback: function(tickValue: string | number) {
+                    const value = typeof tickValue === 'number' ? tickValue : parseFloat(tickValue);
+                    return value % 50 === 0 ? value : '';
+                  }
+                },
+                min: 0,
+                max: 500,
+                beginAtZero: true,
+              }
+            }
           }
-        }
+        });
       }
-    });
-  }
-};
+    };
 
-
-    return { showModal, connectWallet, toggleAnswer, faqAnswers, navigateToExchange, navigateToWallet };
+    return { showModal, connectWallet, toggleAnswer, faqAnswers, navigateToExchange, navigateToWalletSite };
   }
 });
 </script>
@@ -384,6 +383,54 @@ padding: 5px 10px;
 .faq ul li {
   color: #e4e4e4;
   margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 20px;
+  }
+
+  .blockBIRJ {
+    flex-direction: column;
+    gap: 10px; 
+  }
+
+  .block {
+    margin-bottom: 20px;
+  }
+
+  .chart {
+    height: 400px; 
+  }
+
+  .modal-content {
+    max-width: 300px;
+  }
+
+  .footer {
+    font-size: 16px; 
+  }
+
+  .faq ul li {
+    font-size: 18px; 
+  }
+
+  .action-button {
+    font-size: 16px; 
+  }
+
+  .block__header {
+    flex-direction: column;
+    text-align: center; 
+  }
+
+  .block__header img {
+    margin-bottom: 10px; 
+  }
+
+  .faq ul li {
+    font-size: 16px;
+  }
 }
 
 

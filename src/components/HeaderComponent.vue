@@ -38,49 +38,68 @@ export default defineComponent({
 	}
 });
 </script>
-
 <style scoped>
-	header {
-		background-color: #9918aa;
-		box-sizing: border-box;
-		height: 142px;
-		padding: 39px 180px;
+  header {
+    background-color: #9918aa;
+    box-sizing: border-box;
+    height: auto;
+    padding: 39px 180px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
 
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
+  .logo {
+    width: 81px;
+    height: 81px;
+    object-fit: cover;
+    cursor: pointer;
+  }
 
-	.logo {
-		width: 81px;
-		height: 81px;
-		object-fit: cover;
-		cursor: pointer;
-	}
+  .logo img {
+    width: 100%;
+    height: 100%;
+  }
 
-	.logo img {
-		width: 100%;
-		height: 100%;
-	}
+  .user-info {
+    background: #fff;
+    min-width: 250px;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 600;
+    color: #000;
+    padding: 17px 0;
+    margin-top: 25px;
+    border: none;
+    outline: none;
+    transition: all .3s ease 0s;
+    cursor: pointer;
+    text-align: center; /* Центрируем текст */
 
-	.user-info {
-		background: #fff;
-		min-width: 250px;
-		font-size: 24px;
-		line-height: 1.2;
-		font-weight: 600;
-		color: #000;
-		padding: 17px 0;
-		margin-top:25px;
-		border: none;
-		outline: none;
-		transition: all .3s ease 0s;
-		cursor: pointer;
+    &:hover {
+      background: #f1f8fd;
+    }
+  }
 
-		&:hover {
-			background: #f1f8fd;
-		}
-	}
+  /* Адаптивность для мобильных устройств */
+  @media (max-width: 600px) {
+    header {
+      flex-direction: column;
+      padding: 20px 30px;
+      height: auto;
+      align-items: center;
+    }
 
+    .logo {
+      margin-bottom: 20px;
+    }
 
+    .user-info {
+      min-width: 80%;
+      font-size: 20px;
+      padding: 12px 0;
+      margin-top: 15px;
+    }
+  }
 </style>
